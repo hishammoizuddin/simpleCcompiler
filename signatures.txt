@@ -1,0 +1,138 @@
+#light
+
+
+
+
+
+namespace compiler
+  module lexer = begin
+    val private keywords : string list
+    val private identifier_start : char list
+    val private identifier_chars : char list
+    val private lookupKeyword : id:string -> string
+    val private nextChar : input:System.IO.StreamReader -> char
+    val private skipRestOfLine : input:System.IO.StreamReader -> unit
+    val private collectID :
+      nextc:char -> input:System.IO.StreamReader -> id:string -> string * char
+    val private collectStrLiteral :
+      nextc:char -> input:System.IO.StreamReader -> literal:string -> string
+    val private collectIntLiteral :
+      nextc:char ->
+        input:System.IO.StreamReader -> literal:string -> string * char
+    val private lexer :
+      nextc:char ->
+        input:System.IO.StreamReader -> tokens:string list -> string list
+    val analyze : filename:string -> string list
+  end
+
+namespace compiler
+  module parser = begin
+    val private matchToken :
+      expected_token:string -> tokens:string list -> string list
+    val private expr_value : tokens:string list -> string list
+    val private expr_op : tokens:string list -> string list
+    val private expr : tokens:string list -> string list
+    val private empty : tokens:string list -> string list
+    val private vardecl : tokens:string list -> string list
+    val private input : tokens:string list -> string list
+    val private output_value : tokens:string list -> string list
+    val private output : tokens:string list -> string list
+    val private assignment : tokens:string list -> string list
+    val private stmt : tokens:string list -> string list
+    val private ifstmt : tokens:string list -> string list
+    val private condition : tokens:string list -> string list
+    val private then_part : tokens:string list -> string list
+    val private else_part : tokens:string list -> string list
+    val private morestmts : tokens:string list -> string list
+    val private stmts : tokens:string list -> string list
+    val private simpleC : tokens:string list -> string list
+    val parse : tokens:string list -> string
+  end
+
+namespace compiler
+  module analyzer = begin
+    val private matchToken :
+      expected_token:string -> tokens:string list -> string list
+    val private expr_value : tokens:string list -> string list
+    val private expr_op : tokens:string list -> string list
+    val private expr : tokens:string list -> string list
+    val private empty : tokens:string list -> string list
+    val private a_check :
+      rem:'a -> symbT:('a * 'b) list -> bool when 'a : equality
+    val private vardecl :
+      tokens:string list ->
+        symbT:(string * string) list -> string list * (string * string) list
+    val private input : tokens:string list -> string list
+    val private output_value : tokens:string list -> string list
+    val private output : tokens:string list -> string list
+    val private assignment : tokens:string list -> string list
+    val private stmt :
+      tokens:string list ->
+        symbT:(string * string) list -> string list * (string * string) list
+    val private ifstmt :
+      tokens:string list ->
+        symbT:(string * string) list -> string list * (string * string) list
+    val private condition : tokens:string list -> string list
+    val private then_part :
+      tokens:string list ->
+        symbT:(string * string) list -> string list * (string * string) list
+    val private else_part :
+      tokens:string list ->
+        symbT:(string * string) list -> string list * (string * string) list
+    val private morestmts :
+      tokens:string list ->
+        symbT:(string * string) list -> string list * (string * string) list
+    val private stmts :
+      tokens:string list ->
+        symbT:(string * string) list -> string list * (string * string) list
+    val private simpleC :
+      tokens:string list -> string list * (string * string) list
+    val build_symboltable :
+      tokens:string list -> string * (string * string) list
+  end
+
+namespace compiler
+  module checker = begin
+    val c_check :
+      rem:'a -> symbT:('a * string) list -> bool * string when 'a : equality
+    val c_checkFT : rem:'a -> symbT:('a * 'b) list -> bool when 'a : equality
+    val private matchToken :
+      expected_token:string -> tokens:string list -> string list
+    val private expr_value :
+      tokens:string list -> symbT:(string * string) list -> string list * string
+    val private expr_op : tokens:string list -> string list * string
+    val private expr :
+      tokens:string list -> symbT:(string * string) list -> string list * string
+    val private empty : tokens:string list -> string list
+    val private vardecl : tokens:string list -> string list
+    val private input :
+      tokens:string list -> symbT:(string * 'a) list -> string list
+    val private output_value :
+      tokens:string list -> symbT:(string * string) list -> string list
+    val private output :
+      tokens:string list -> symbT:(string * string) list -> string list
+    val private assignment :
+      tokens:string list -> symbT:(string * string) list -> string list
+    val private stmt :
+      tokens:string list -> symbT:(string * string) list -> string list
+    val private ifstmt :
+      tokens:string list -> symbT:(string * string) list -> string list
+    val private condition :
+      tokens:string list -> symbT:(string * string) list -> string list
+    val private then_part :
+      tokens:string list -> symbT:(string * string) list -> string list
+    val private else_part :
+      tokens:string list -> symbT:(string * string) list -> string list
+    val private morestmts :
+      tokens:string list -> symbT:(string * string) list -> string list
+    val private stmts :
+      tokens:string list -> symbT:(string * string) list -> string list
+    val private simpleC :
+      tokens:string list -> symbT:(string * string) list -> string list
+    val typecheck :
+      tokens:string list -> symboltable:(string * string) list -> string
+  end
+
+module Main
+val main : argv:string [] -> int
+
